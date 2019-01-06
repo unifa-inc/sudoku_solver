@@ -10,3 +10,7 @@ input.cell {
 input.filled {
   background-color: LightGreen;
 }
+
+table {
+  margin: auto;
+}
