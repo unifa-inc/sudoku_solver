@@ -42,10 +42,12 @@ const solveBlock = (val, block, vals) => {
   const org_r = block_origins[block][0];
   const org_c = block_origins[block][1];
 
+  /** 3x3の2次元配列に制約を保持　valが入る可能性が、ある(1)/ない(0) */
   let block_vals = [];
   for (let i = 0; i < 3; i++) {
     let row = [];
     for (let j = 0; j < 3; j++) {
+      /** すでにvalがあれば次のブロックへ */
       if (vals[org_r+i][org_c+j] === val) {
         console.log("OUT:" + block_vals);
         return;
@@ -56,6 +58,7 @@ const solveBlock = (val, block, vals) => {
   }
   console.log(block_vals);
 
+  /** 水平方向のブロックにvalが存在するか確認 */
   for (let i = 0; i < 3; i++) {
     if (vals[org_r+i].indexOf(val) >= 0) {
       for (let j = 0; j < 3; j++) {
@@ -65,6 +68,7 @@ const solveBlock = (val, block, vals) => {
   }
   console.log(block_vals);
 
+  /** 垂直方向のブロックにvalが存在するか確認 */
   for (let j = 0; j < 3; j++) {
     for (let k = 0; k < 9; k++) {
       if (vals[k][org_c+j] === val) {
@@ -77,6 +81,7 @@ const solveBlock = (val, block, vals) => {
   }
   console.log(block_vals);
 
+  /** 3x3の2次元配列に1が1つの場合のみvalがそのセルに入ると断定できる */
   let sum = 0;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
