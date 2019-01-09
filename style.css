@@ -11,6 +11,10 @@ input.filled {
   background-color: LightGreen;
 }
 
+input.solved {
+  color: blue;
+}
+
 table {
   margin: auto;
 }
