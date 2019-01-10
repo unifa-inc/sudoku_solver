@@ -9,14 +9,12 @@ $("#hint").on("click", () => {
     }
     vals.push(row);
   }
-  console.log(vals);
 
   /** 1~9の各数字を左上からブロックごとに算定。ヒントが見つかったらbreak */
   let hint_cell;
   iterateNumber:
   for (let n = 1; n <= 9; n++) {
     for (let b = 0; b < 9; b++) {
-      console.log(`Block: ${b}, n: ${n}`);
       hint_cell = hintBlock(n, b, vals);
       if (hint_cell) { break iterateNumber; }
     }
@@ -46,7 +44,6 @@ const hintBlock = (num, block, vals) => {
     for (let j = 0; j < 3; j++) {
       /** すでにnumがあれば次のブロックへ */
       if (vals[org_r+i][org_c+j] === num) {
-        console.log(`OUT: ${block_cstrs}`);
         return;
       }
       row.push(vals[org_r+i][org_c+j] > 0 ? 0 : 1);
@@ -74,7 +71,6 @@ const hintBlock = (num, block, vals) => {
       }
     }
   }
-  console.log(block_cstrs);
 
   /** 3x3の2次元配列に「1」が1つのみの場合、numがそのセルに入ると断定できる */
   let sum = 0;
@@ -92,5 +88,4 @@ const hintBlock = (num, block, vals) => {
       }
     }
   }
-  console.log(vals);
 };

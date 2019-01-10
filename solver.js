@@ -8,7 +8,6 @@ $("#solve").on("click", () => {
     }
     vals.push(row);
   }
-  console.log(vals);
 
   /** 答えが見つからなくなるまでループ */
   let solved_cnt;
@@ -17,7 +16,6 @@ $("#solve").on("click", () => {
     /** 1~9の各数字を左上からブロックごとに算定してvalsに保持 */
     for (let n = 1; n <= 9; n++) {
       for (let b = 0; b < 9; b++) {
-        console.log(`Block: ${b}, n: ${n}`);
         const solved = solveBlock(n, b, vals);
         solved_cnt += solved ? 1 : 0;
       }
@@ -49,7 +47,6 @@ const solveBlock = (num, block, vals) => {
     for (let j = 0; j < 3; j++) {
       /** すでにnumがあれば次のブロックへ */
       if (vals[org_r+i][org_c+j] === num) {
-        console.log(`OUT: ${block_cstrs}`);
         return;
       }
       row.push(vals[org_r+i][org_c+j] > 0 ? 0 : 1);
@@ -77,7 +74,6 @@ const solveBlock = (num, block, vals) => {
       }
     }
   }
-  console.log(block_cstrs);
 
   /** 3x3の2次元配列に1が1つの場合のみnumがそのセルに入ると断定できる */
   let sum = 0;
@@ -95,7 +91,6 @@ const solveBlock = (num, block, vals) => {
       }
     }
   }
-  console.log(vals);
 
   return sum === 1 ? true : false;
 };
