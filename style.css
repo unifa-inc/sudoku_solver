@@ -15,6 +15,10 @@ input.solved {
   color: blue;
 }
 
+input.hinted {
+  background-color: pink;
+}
+
 table {
   margin: auto;
 }

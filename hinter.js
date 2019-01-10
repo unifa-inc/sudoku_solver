@@ -1,41 +1,38 @@
-$("#solve").on("click", () => {
+$("#hint").on("click", () => {
   /** vals（２次元配列）に現在の入力値を保持 */
   let vals = [];
   for (let i = 0; i < 9; i++) {
     let row = [];
     for (let j = 0; j < 9; j++) {
       row.push($(`#cell_${i}_${j}`).val() * 1);
+      $(`#cell_${i}_${j}`).removeClass("hinted");
     }
     vals.push(row);
   }
   console.log(vals);
 
-  /** 答えが見つからなくなるまでループ */
-  let solved_cnt;
-  do {
-    solved_cnt = 0;
-    /** 1~9の各数字を左上からブロックごとに算定してvalsに保持 */
-    for (let n = 1; n <= 9; n++) {
-      for (let b = 0; b < 9; b++) {
-        console.log(`Block: ${b}, n: ${n}`);
-        const solved = solveBlock(n, b, vals);
-        solved_cnt += solved ? 1 : 0;
-      }
+  /** 1~9の各数字を左上からブロックごとに算定。ヒントが見つかったらbreak */
+  let hint_cell;
+  iterateNumber:
+  for (let n = 1; n <= 9; n++) {
+    for (let b = 0; b < 9; b++) {
+      console.log(`Block: ${b}, n: ${n}`);
+      hint_cell = hintBlock(n, b, vals);
+      if (hint_cell) { break iterateNumber; }
     }
-  } while (solved_cnt > 0);
+  }
 
-  /** valsの値をグリッドに描画 */
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      if (vals[i][j] > 0 && $(`#cell_${i}_${j}`).val() != vals[i][j]) {
-        $(`#cell_${i}_${j}`).val(vals[i][j]);
-        $(`#cell_${i}_${j}`).addClass("solved");
-      }
-    }
+  /** ヒントのセルを色付け */
+  if (hint_cell) {
+    const [r, c] = hint_cell
+    $(`#cell_${r}_${c}`).addClass("hinted");
+    $(`#cell_${r}_${c}`).focus();
+  } else {
+    alert("ボーっと生きてんじゃねーよ！");
   }
 });
 
-const solveBlock = (val, block, vals) => {
+const hintBlock = (val, block, vals) => {
   /** 各ブロックの左上のセル位置 */
   const block_origins = [[0,0],[0,3],[0,6],[3,0],[3,3],[3,6],[6,0],[6,3],[6,6]];
 
@@ -79,7 +76,7 @@ const solveBlock = (val, block, vals) => {
   }
   console.log(block_vals);
 
-  /** 3x3の2次元配列に1が1つの場合のみvalがそのセルに入ると断定できる */
+  /** 3x3の2次元配列に「1」が1つのみの場合、valがそのセルに入ると断定できる */
   let sum = 0;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -90,12 +87,10 @@ const solveBlock = (val, block, vals) => {
     for (let i = 0; i < 3; i++) {
       const idx = block_vals[i].indexOf(1);
       if (idx >= 0) {
-        vals[org_r+i][org_c+idx] = val;
-        break;
+        console.log(`HINT: ${val}`);
+        return [org_r+i, org_c+idx];
       }
     }
   }
   console.log(vals);
-
-  return sum === 1 ? true : false;
 };
