@@ -35,62 +35,62 @@ $("#solve").on("click", () => {
   }
 });
 
-const solveBlock = (val, block, vals) => {
+const solveBlock = (num, block, vals) => {
   /** 各ブロックの左上のセル位置 */
   const block_origins = [[0,0],[0,3],[0,6],[3,0],[3,3],[3,6],[6,0],[6,3],[6,6]];
 
   const org_r = block_origins[block][0];
   const org_c = block_origins[block][1];
 
-  /** 3x3の2次元配列に制約を保持　valが入る可能性が、ある(1)/ない(0) */
-  let block_vals = [];
+  /** 3x3の2次元配列に制約を保持　numが入る可能性が、ある(1)/ない(0) */
+  let block_cstrs = [];
   for (let i = 0; i < 3; i++) {
     let row = [];
     for (let j = 0; j < 3; j++) {
-      /** すでにvalがあれば次のブロックへ */
-      if (vals[org_r+i][org_c+j] === val) {
-        console.log(`OUT: ${block_vals}`);
+      /** すでにnumがあれば次のブロックへ */
+      if (vals[org_r+i][org_c+j] === num) {
+        console.log(`OUT: ${block_cstrs}`);
         return;
       }
       row.push(vals[org_r+i][org_c+j] > 0 ? 0 : 1);
     }
-    block_vals.push(row);
+    block_cstrs.push(row);
   }
 
-  /** 水平方向のブロックにvalが存在するか確認 */
+  /** 水平方向のブロックにnumが存在するか確認 */
   for (let i = 0; i < 3; i++) {
-    if (vals[org_r+i].indexOf(val) >= 0) {
+    if (vals[org_r+i].indexOf(num) >= 0) {
       for (let j = 0; j < 3; j++) {
-        block_vals[i][j] = 0;
+        block_cstrs[i][j] = 0;
       }
     }
   }
 
-  /** 垂直方向のブロックにvalが存在するか確認 */
+  /** 垂直方向のブロックにnumが存在するか確認 */
   for (let j = 0; j < 3; j++) {
     for (let k = 0; k < 9; k++) {
-      if (vals[k][org_c+j] === val) {
+      if (vals[k][org_c+j] === num) {
         for (let i = 0; i < 3; i++) {
-          block_vals[i][j] = 0;
+          block_cstrs[i][j] = 0;
         }
         break;
       }
     }
   }
-  console.log(block_vals);
+  console.log(block_cstrs);
 
-  /** 3x3の2次元配列に1が1つの場合のみvalがそのセルに入ると断定できる */
+  /** 3x3の2次元配列に1が1つの場合のみnumがそのセルに入ると断定できる */
   let sum = 0;
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      sum += block_vals[i][j];
+      sum += block_cstrs[i][j];
     }
   }
   if (sum === 1) {
     for (let i = 0; i < 3; i++) {
-      const idx = block_vals[i].indexOf(1);
+      const idx = block_cstrs[i].indexOf(1);
       if (idx >= 0) {
-        vals[org_r+i][org_c+idx] = val;
+        vals[org_r+i][org_c+idx] = num;
         break;
       }
     }
